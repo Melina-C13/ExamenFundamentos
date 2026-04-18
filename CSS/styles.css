@@ -1,0 +1,390 @@
+/* Estilos personalizados para UNA-TEATRO - Diseño Circular */
+
+/* Barra de navegación */
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Contenedor principal del teatro con filas curvas */
+.curved-theater {
+    position: relative;
+    min-height: 600px;
+    margin: 30px 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.theater-layout {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Escenario superior curvo */
+.stage-container {
+    position: relative;
+    width: 100%;
+    height: 80px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stage-shape {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%);
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    padding: 15px 60px;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    border: 3px solid #3498db;
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.3),
+        inset 0 2px 5px rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+    position: relative;
+    z-index: 10;
+}
+
+/* Contenedor de asientos curvos */
+.seating-chart {
+    position: relative;
+    width: 100%;
+    min-height: 400px;
+    background: radial-gradient(ellipse at center top, 
+        rgba(52, 152, 219, 0.05) 0%, 
+        transparent 50%);
+    border-radius: 0 0 50% 50% / 0 0 20% 20%;
+    padding: 20px;
+}
+
+/* Filas de asientos */
+.seat-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+/* Etiqueta de fila */
+.row-label {
+    position: absolute;
+    left: -30px;
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 14px;
+    width: 25px;
+    text-align: center;
+}
+
+/* Asientos individuales */
+.seat {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin: 0 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.seat.available {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    border-color: #229954;
+}
+
+.seat.available:hover {
+    background: linear-gradient(135deg, #229954 0%, #27ae60 100%);
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.4);
+}
+
+.seat.selected {
+    background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%);
+    border-color: #138d75;
+    animation: pulse 1.5s infinite;
+}
+
+.seat.occupied {
+    background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+    border-color: #707b7c;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Escenario circular central */
+.stage-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 80px;
+    background: linear-gradient(135deg, #34495e 0%, #2c3e50 50%, #1a252f 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.4),
+        0 0 0 2px rgba(52, 152, 219, 0.3),
+        inset 0 2px 5px rgba(255, 255, 255, 0.1);
+    border: 2px solid #3498db;
+}
+
+.stage-inner {
+    text-align: center;
+    color: white;
+    padding: 10px;
+}
+
+.stage-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Asientos circulares */
+.circular-seats {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, 
+        rgba(52, 152, 219, 0.03) 0%, 
+        rgba(52, 152, 219, 0.01) 30%, 
+        transparent 60%);
+    border-radius: 50%;
+}
+
+/* Guías de alineación (opcionales para desarrollo) */
+.circular-seats::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 140px;
+    height: 140px;
+    border: 1px dashed rgba(52, 152, 219, 0.1);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.circular-seats::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 220px;
+    height: 220px;
+    border: 1px dashed rgba(52, 152, 219, 0.05);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.seat-circle {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.seat-circle.available {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    border-color: #2471a3;
+    position: relative;
+}
+
+.seat-circle.available::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: radial-gradient(circle at 30% 30%, 
+        rgba(255, 255, 255, 0.4) 0%, 
+        transparent 50%);
+    border-radius: 50%;
+}
+
+.seat-circle.available:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #1f618d 100%);
+    transform: scale(1.3);
+    box-shadow: 
+        0 4px 15px rgba(52, 152, 219, 0.6),
+        0 0 0 3px rgba(52, 152, 219, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+.seat-circle.occupied {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    border-color: #a93226;
+    cursor: not-allowed;
+    opacity: 0.8;
+    box-shadow: 
+        0 2px 6px rgba(231, 76, 60, 0.3),
+        inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.seat-circle.selected {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    border-color: #d35400;
+    animation: pulse 1.5s infinite;
+    box-shadow: 
+        0 4px 15px rgba(243, 156, 18, 0.6),
+        0 0 0 3px rgba(243, 156, 18, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+.seat-circle.selected::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: radial-gradient(circle at 30% 30%, 
+        rgba(255, 255, 255, 0.5) 0%, 
+        transparent 50%);
+    border-radius: 50%;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Botón de reserva */
+.reserve-btn {
+    background: #17a2b8 !important;
+    border: none;
+    color: white;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.reserve-btn:hover {
+    background: #138496 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+}
+
+/* Leyenda */
+.legend {
+    background: rgba(0,0,0,0.03);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.legend .seat-circle {
+    position: relative;
+    margin: 0 5px 0 0;
+}
+
+/* Footer */
+footer {
+    background: #2c3e50 !important;
+    margin-top: 50px;
+}
+
+footer h5 {
+    color: #17a2b8;
+    border-bottom: 2px solid #17a2b8;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .theater-container {
+        width: 350px;
+        height: 350px;
+    }
+    
+    .stage-circle {
+        width: 80px;
+        height: 60px;
+    }
+    
+    .stage-title {
+        font-size: 0.9rem;
+    }
+    
+    .seat-circle {
+        width: 15px;
+        height: 15px;
+    }
+    
+    .legend {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .theater-container {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .stage-circle {
+        width: 70px;
+        height: 50px;
+    }
+    
+    .stage-title {
+        font-size: 0.8rem;
+    }
+    
+    .seat-circle {
+        width: 12px;
+        height: 12px;
+    }
+}
