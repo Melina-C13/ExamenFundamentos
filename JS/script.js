@@ -1,326 +1,253 @@
-// Sistema de Reservas UNA-TEATRO
-
 class TheaterSeating {
     constructor() {
-        this.rows = 8;
-        this.seatsPerRow = 12;
         this.selectedSeats = [];
-        this.occupiedSeats = this.generateRandomOccupiedSeats();
-        this.maxSeatsPerReservation = 8;
-        
+        this.maxSeats = 8;
+        this.occupiedSeats = this.generateOccupied();
+        this.rows = [
+            { label: 'A', seats: 10, curve: 0 },
+            { label: 'B', seats: 12, curve: 4 },
+            { label: 'C', seats: 14, curve: 8 },
+            { label: 'D', seats: 16, curve: 12 },
+            { label: 'E', seats: 18, curve: 16 },
+            { label: 'F', seats: 16, curve: 12 },
+            { label: 'G', seats: 14, curve: 8 },
+            { label: 'H', seats: 12, curve: 4 },
+        ];
         this.init();
     }
 
-    init() {
-        this.generateSeatingChart();
-        this.bindEvents();
-        this.updateSelectedSeatsDisplay();
-    }
-
-    generateRandomOccupiedSeats() {
+    generateOccupied() {
         const occupied = [];
         const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-        const seatsPerRow = [12, 14, 16, 18, 20, 18, 16, 14];
-        const numberOfOccupied = Math.floor(Math.random() * 30) + 20; // 20-50 asientos ocupados
-        
-        for (let i = 0; i < numberOfOccupied; i++) {
-            const rowIndex = Math.floor(Math.random() * rows.length);
-            const seatNumber = Math.floor(Math.random() * seatsPerRow[rowIndex]) + 1;
-            const seatId = `${rows[rowIndex]}${seatNumber}`;
-            
-            if (!occupied.includes(seatId)) {
-                occupied.push(seatId);
-            }
+        const counts = [10, 12, 14, 16, 18, 16, 14, 12];
+        const total = Math.floor(Math.random() * 30) + 20;
+        for (let i = 0; i < total; i++) {
+            const ri = Math.floor(Math.random() * rows.length);
+            const si = Math.floor(Math.random() * counts[ri]) + 1;
+            const id = `${rows[ri]}${si}`;
+            if (!occupied.includes(id)) occupied.push(id);
         }
-        
         return occupied;
     }
 
-    generateSeatingChart() {
+    init() {
+        this.render();
+        this.bindEvents();
+    }
+
+    render() {
         const container = document.getElementById('seatingChart');
         container.innerHTML = '';
-
-        // Configuración de filas (similar a la imagen)
-        const rows = [
-            { label: 'A', seats: 12, curve: 0 },    // Fila frontal (recta)
-            { label: 'B', seats: 14, curve: 5 },    // Ligera curva
-            { label: 'C', seats: 16, curve: 10 },   // Curva moderada
-            { label: 'D', seats: 18, curve: 15 },   // Curva más pronunciada
-            { label: 'E', seats: 20, curve: 20 },   // Curva fuerte
-            { label: 'F', seats: 18, curve: 18 },   // Curva disminuyendo
-            { label: 'G', seats: 16, curve: 12 },   // Curva suave
-            { label: 'H', seats: 14, curve: 8 }     // Curva muy suave
-        ];
-        
-        let seatCounter = 1;
-        
-        rows.forEach((row, rowIndex) => {
+        this.rows.forEach(row => {
             const rowDiv = document.createElement('div');
             rowDiv.className = 'seat-row';
-            
-            // Etiqueta de fila
-            const labelDiv = document.createElement('div');
-            labelDiv.className = 'row-label';
-            labelDiv.textContent = row.label;
-            rowDiv.appendChild(labelDiv);
-            
-            // Contenedor para asientos de esta fila
-            const seatsContainer = document.createElement('div');
-            seatsContainer.style.display = 'flex';
-            seatsContainer.style.justifyContent = 'center';
-            seatsContainer.style.alignItems = 'center';
-            seatsContainer.style.position = 'relative';
-            
+
+            const lbl = document.createElement('div');
+            lbl.className = 'row-label';
+            lbl.textContent = row.label;
+            rowDiv.appendChild(lbl);
+
             for (let i = 0; i < row.seats; i++) {
-                const seatId = `${row.label}${i + 1}`;
-                const seatDiv = document.createElement('div');
-                seatDiv.className = 'seat';
-                seatDiv.dataset.seatId = seatId;
-                seatDiv.textContent = i + 1; // Mostrar número del asiento
-                seatDiv.title = `Asiento ${seatId}`;
-                
-                // Aplicar curva sutil
+                const id = `${row.label}${i + 1}`;
+                const seat = document.createElement('div');
+                seat.className = 'seat';
+                seat.dataset.seatId = id;
+                seat.textContent = i + 1;
+                seat.title = `Asiento ${id}`;
+
                 if (row.curve > 0) {
-                    const curveOffset = Math.sin((i / (row.seats - 1)) * Math.PI - Math.PI / 2) * row.curve;
-                    seatDiv.style.transform = `translateY(${curveOffset}px)`;
+                    const offset = Math.sin((i / (row.seats - 1)) * Math.PI - Math.PI / 2) * row.curve;
+                    seat.style.transform = `translateY(${offset}px)`;
                 }
-                
-                if (this.occupiedSeats.includes(seatId)) {
-                    seatDiv.classList.add('occupied');
-                } else {
-                    seatDiv.classList.add('available');
-                }
-                
-                seatsContainer.appendChild(seatDiv);
-                seatCounter++;
+
+                seat.classList.add(this.occupiedSeats.includes(id) ? 'occupied' : 'available');
+                rowDiv.appendChild(seat);
             }
-            
-            rowDiv.appendChild(seatsContainer);
             container.appendChild(rowDiv);
         });
     }
 
     bindEvents() {
-        // Eventos de clic en los asientos
-        document.addEventListener('click', (e) => {
-            if ((e.target.classList.contains('seat') || e.target.classList.contains('seat-circle')) && !e.target.classList.contains('occupied')) {
-                this.toggleSeatSelection(e.target);
+        document.addEventListener('click', e => {
+            if (e.target.classList.contains('seat') && !e.target.classList.contains('occupied')) {
+                this.toggleSeat(e.target);
             }
         });
-
-        // Evento del formulario
-        const form = document.getElementById('reservationForm');
-        if (form) {
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.processReservation();
-            });
-        }
-
-        // Evento del contador de asientos
-        const seatCountInput = document.getElementById('seatCount');
-        if (seatCountInput) {
-            seatCountInput.addEventListener('change', () => {
-                this.validateSeatCount();
-            });
-        }
+        document.getElementById('reservationForm').addEventListener('submit', e => {
+            e.preventDefault();
+            this.processReservation();
+        });
+        document.getElementById('seatCount').addEventListener('change', () => this.validateCount());
     }
 
-    toggleSeatSelection(seatElement) {
-        const seatId = seatElement.dataset.seatId;
-        
-        if (seatElement.classList.contains('selected')) {
-            seatElement.classList.remove('selected');
-            seatElement.classList.add('available');
-            this.selectedSeats = this.selectedSeats.filter(id => id !== seatId);
+    toggleSeat(el) {
+        const id = el.dataset.seatId;
+        if (el.classList.contains('selected')) {
+            el.classList.replace('selected', 'available');
+            this.selectedSeats = this.selectedSeats.filter(s => s !== id);
         } else {
-            if (this.selectedSeats.length >= this.maxSeatsPerReservation) {
-                this.showNotification('Ha alcanzado el máximo de asientos permitidos por reserva', 'warning');
-                return;
+            if (this.selectedSeats.length >= this.maxSeats) {
+                this.notify('Máximo 8 asientos por reserva', 'warning'); return;
             }
-            
-            seatElement.classList.remove('available');
-            seatElement.classList.add('selected');
-            this.selectedSeats.push(seatId);
+            el.classList.replace('available', 'selected');
+            this.selectedSeats.push(id);
         }
-        
-        this.updateSelectedSeatsDisplay();
-        this.updateSeatCountInput();
+        this.updateDisplay();
+        document.getElementById('seatCount').value = this.selectedSeats.length || 1;
     }
 
-    updateSelectedSeatsDisplay() {
-        const selectedSeatsText = document.getElementById('selectedSeatsText');
-        const selectedSeatsDiv = document.getElementById('selectedSeats');
-        
+    updateDisplay() {
+        const display = document.getElementById('selectedSeatsDisplay');
+        const text = document.getElementById('selectedSeatsText');
+        display.innerHTML = '';
         if (this.selectedSeats.length === 0) {
-            selectedSeatsText.textContent = 'Ningún asiento seleccionado';
-            selectedSeatsDiv.className = 'alert alert-info';
+            display.classList.remove('has-seats');
+            const span = document.createElement('span');
+            span.style.cssText = 'color:var(--stone);font-size:0.8rem;';
+            span.textContent = 'Haz clic en los asientos del mapa';
+            display.appendChild(span);
         } else {
-            selectedSeatsText.textContent = this.selectedSeats.sort().join(', ');
-            selectedSeatsDiv.className = 'alert alert-success';
+            display.classList.add('has-seats');
+            this.selectedSeats.sort().forEach(id => {
+                const tag = document.createElement('span');
+                tag.className = 'seat-tag';
+                tag.textContent = id;
+                display.appendChild(tag);
+            });
         }
     }
 
-    updateSeatCountInput() {
-        const seatCountInput = document.getElementById('seatCount');
-        if (seatCountInput && this.selectedSeats.length > 0) {
-            seatCountInput.value = this.selectedSeats.length;
-        }
-    }
-
-    validateSeatCount() {
-        const seatCountInput = document.getElementById('seatCount');
-        const desiredCount = parseInt(seatCountInput.value);
-        
-        if (this.selectedSeats.length > 0 && this.selectedSeats.length !== desiredCount) {
-            this.showNotification(`Ha seleccionado ${this.selectedSeats.length} asientos, pero indicó que desea ${desiredCount}. Por favor, ajuste su selección.`, 'warning');
+    validateCount() {
+        const val = parseInt(document.getElementById('seatCount').value);
+        if (this.selectedSeats.length > 0 && this.selectedSeats.length !== val) {
+            this.notify(`Tienes ${this.selectedSeats.length} asientos seleccionados pero indicaste ${val}`, 'warning');
         }
     }
 
     processReservation() {
-        const customerName = document.getElementById('customerName').value.trim();
-        const customerEmail = document.getElementById('customerEmail').value.trim();
-        const customerPhone = document.getElementById('customerPhone').value.trim();
-        const seatCount = parseInt(document.getElementById('seatCount').value);
+        const name = document.getElementById('customerName').value.trim();
+        const email = document.getElementById('customerEmail').value.trim();
+        const phone = document.getElementById('customerPhone').value.trim();
+        const count = parseInt(document.getElementById('seatCount').value);
 
-        // Validaciones
-        if (!customerName || !customerEmail || !customerPhone) {
-            this.showNotification('Por favor, complete todos los campos del formulario', 'danger');
-            return;
+        if (!name || !email || !phone) { this.notify('Completa todos los campos', 'danger'); return; }
+        if (this.selectedSeats.length === 0) { this.notify('Selecciona al menos un asiento', 'danger'); return; }
+        if (this.selectedSeats.length !== count) {
+            this.notify(`Seleccionados: ${this.selectedSeats.length} - Solicitados: ${count}`, 'danger'); return;
         }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { this.notify('Correo inválido', 'danger'); return; }
 
-        if (this.selectedSeats.length === 0) {
-            this.showNotification('Por favor, seleccione al menos un asiento', 'danger');
-            return;
-        }
-
-        if (this.selectedSeats.length !== seatCount) {
-            this.showNotification(`La cantidad de asientos seleccionados (${this.selectedSeats.length}) no coincide con la cantidad solicitada (${seatCount})`, 'danger');
-            return;
-        }
-
-        // Validar formato de correo
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(customerEmail)) {
-            this.showNotification('Por favor, ingrese un correo electrónico válido', 'danger');
-            return;
-        }
-
-        // Procesar la reserva
-        this.confirmReservation(customerName, customerEmail, customerPhone);
+        this.confirmReservation(name, email, phone);
     }
 
     confirmReservation(name, email, phone) {
-        // Marcar asientos como ocupados
-        this.selectedSeats.forEach(seatId => {
-            const seatElement = document.querySelector(`[data-seat-id="${seatId}"]`);
-            if (seatElement) {
-                seatElement.classList.remove('selected', 'available');
-                seatElement.classList.add('occupied');
-            }
-            this.occupiedSeats.push(seatId);
-        });
-
-        // Generar número de reserva
-        const reservationNumber = 'RES-' + Date.now().toString().slice(-8);
-
-        // Mostrar confirmación
-        this.showReservationConfirmation(reservationNumber, name, email, phone);
-
-        // Limpiar selección
-        this.selectedSeats = [];
-        this.updateSelectedSeatsDisplay();
-
-        // Resetear formulario
-        document.getElementById('reservationForm').reset();
-        document.getElementById('seatCount').value = 1;
-    }
-
-    showReservationConfirmation(reservationNumber, name, email, phone) {
-        const reservationInfo = document.getElementById('reservationInfo');
-        const reservationDetails = document.getElementById('reservationDetails');
-        
-        const seatsText = this.selectedSeats.sort().join(', ');
+        const seatsText = [...this.selectedSeats].sort().join(', ');
+        const resNum = 'RES-' + Date.now().toString().slice(-8);
+        const total = (this.selectedSeats.length * 5000).toLocaleString('es-CR');
         const date = new Date().toLocaleDateString('es-CR');
         const time = new Date().toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit' });
-        
-        reservationDetails.innerHTML = `
-            <strong>Número de Reserva:</strong> ${reservationNumber}<br>
+
+        this.selectedSeats.forEach(id => {
+            const el = document.querySelector(`[data-seat-id="${id}"]`);
+            if (el) { el.classList.remove('selected'); el.classList.add('occupied'); }
+            this.occupiedSeats.push(id);
+        });
+
+        document.getElementById('reservationDetails').innerHTML = `
+            <strong>N° Reserva:</strong> ${resNum}<br>
             <strong>Cliente:</strong> ${name}<br>
             <strong>Correo:</strong> ${email}<br>
             <strong>Teléfono:</strong> ${phone}<br>
-            <strong>Asientos Reservados:</strong> ${seatsText}<br>
-            <strong>Fecha:</strong> ${date}<br>
-            <strong>Hora:</strong> ${time}<br>
-            <strong>Total:</strong> ₡${this.selectedSeats.length * 5000}
+            <strong>Asientos:</strong> ${seatsText}<br>
+            <strong>Fecha:</strong> ${date} - ${time}<br>
+            <strong>Total:</strong> ${total}
         `;
-        
-        reservationInfo.style.display = 'block';
-        reservationInfo.scrollIntoView({ behavior: 'smooth' });
-        
-        this.showNotification('¡Reserva confirmada exitosamente!', 'success');
-    }
 
-    showNotification(message, type = 'info') {
-        // Crear notificación
-        const notification = document.createElement('div');
-        notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-        notification.style.cssText = 'top: 20px; right: 20px; z-index: 1050; max-width: 300px;';
-        notification.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Auto-eliminar después de 5 segundos
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 5000);
-    }
+        const info = document.getElementById('reservationInfo');
+        info.style.display = 'block';
+        info.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-    // Método para resetear el sistema
-    resetSystem() {
         this.selectedSeats = [];
-        this.occupiedSeats = this.generateRandomOccupiedSeats();
-        this.generateSeatingChart();
-        this.updateSelectedSeatsDisplay();
-        document.getElementById('reservationInfo').style.display = 'none';
+        this.updateDisplay();
         document.getElementById('reservationForm').reset();
         document.getElementById('seatCount').value = 1;
+        this.notify('¡Reserva confirmada exitosamente!', 'success');
+    }
+
+    /* Ejercicio 2 - Función suggest() mejorada */
+    suggest(n) {
+        // Validar que n sea un número válido
+        if (n <= 0 || !Number.isInteger(n)) {
+            return new Set(); // cantidad inválida -> set vacío
+        }
+
+        // Obtener el tamaño máximo de cualquier fila
+        const maxRowSize = Math.max(...this.rows.map(r => r.seats));
+        
+        // Caso 1: Si la cantidad de asientos solicitados excede el tamaño máximo de la fila
+        if (n > maxRowSize) {
+            return new Set(); // excede tamaño máximo -> set vacío
+        }
+
+        // Center row index (rows sorted A=front ... H=back, center = middle)
+        const centerIndex = Math.floor(this.rows.length / 2);
+
+        // Build sorted order by distance from center (filas más cercanas al escenario primero)
+        const order = this.rows.map((r, i) => ({ row: r, dist: Math.abs(i - centerIndex) }))
+            .sort((a, b) => a.dist - b.dist);
+
+        // Buscar asientos contiguos en cada fila, desde la más cercana al escenario
+        for (const { row } of order) {
+            // Si n excede el tamaño de esta fila específica, continuar con la siguiente
+            if (n > row.seats) continue;
+
+            // Build availability array for this row (true = disponible, false = ocupado)
+            const avail = [];
+            for (let i = 1; i <= row.seats; i++) {
+                const id = `${row.label}${i}`;
+                avail.push(!this.occupiedSeats.includes(id));
+            }
+
+            // Slide window of size n - buscar n asientos contiguos disponibles
+            for (let start = 0; start <= row.seats - n; start++) {
+                const window = avail.slice(start, start + n);
+                if (window.every(Boolean)) {
+                    // Encontramos n asientos contiguos disponibles
+                    const result = new Set();
+                    for (let k = 0; k < n; k++) result.add(`${row.label}${start + k + 1}`);
+                    return result;
+                }
+            }
+        }
+
+        // Caso 2: Si en ninguna fila hay suficientes asientos disponibles juntos
+        return new Set(); // no se encontraron asientos contiguos -> set vacío
+    }
+
+    notify(msg, type = 'info') {
+        const n = document.createElement('div');
+        n.className = `notif notif-${type}`;
+        n.textContent = msg;
+        document.body.appendChild(n);
+        setTimeout(() => n.remove(), 4000);
     }
 }
 
-// Inicializar el sistema cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    window.theaterSeating = new TheaterSeating();
-    
-    // Agadir atajos de teclado
-    document.addEventListener('keydown', (e) => {
-        // Ctrl+R para resetear el sistema
+    window.theater = new TheaterSeating();
+
+    // Ctrl+R -> reset
+    document.addEventListener('keydown', e => {
         if (e.ctrlKey && e.key === 'r') {
             e.preventDefault();
-            if (confirm('¿Desea resetear el sistema de reservas?')) {
-                window.theaterSeating.resetSystem();
+            if (confirm('¿Resetear el sistema de reservas?')) {
+                window.theater.selectedSeats = [];
+                window.theater.occupiedSeats = window.theater.generateOccupied();
+                window.theater.render();
+                window.theater.updateDisplay();
+                document.getElementById('reservationInfo').style.display = 'none';
+                document.getElementById('reservationForm').reset();
             }
         }
     });
 });
-
-// Función para exportar datos (opcional)
-function exportReservationData() {
-    const data = {
-        occupiedSeats: window.theaterSeating.occupiedSeats,
-        timestamp: new Date().toISOString()
-    };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `una-teatro-reservas-${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-}
