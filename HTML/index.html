@@ -3,159 +3,778 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNA-TEATRO - Sistema de Reservas</title>
+    <title>UNA-TEATRO - Sistema de Reserva</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../CSS/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rich-black: #00DF81;
+            --dark-green: #032221;
+            --bangladesh: #03624C;
+            --meadow: #2CC295;
+            --caribbean: #00DF81;
+            --white: #F1F7F6;
+            --pine: #06302B;
+            --basil: #0B453A;
+            --forest: #095544;
+            --frog: #17876D;
+            --mint: #2FA98C;
+            --stone: #707D7D;
+            --pistachio: #AACBC4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--dark-green);
+            color: var(--white);
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            background: rgba(3, 34, 33, 0.95) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(44, 194, 149, 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar-brand {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--caribbean) !important;
+            letter-spacing: 3px;
+        }
+        .navbar-brand span { color: var(--white); }
+        .nav-link {
+            color: var(--pistachio) !important;
+            font-weight: 500;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+        .nav-link:hover { color: var(--caribbean) !important; }
+
+        /* ── HERO STRIP ── */
+        .hero-strip {
+            background: linear-gradient(90deg, var(--pine) 0%, var(--bangladesh) 50%, var(--pine) 100%);
+            text-align: center;
+            padding: 2.5rem 1rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-strip::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 60px,
+                rgba(44,194,149,0.04) 60px,
+                rgba(44,194,149,0.04) 61px
+            );
+        }
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            color: var(--white);
+            letter-spacing: 6px;
+            line-height: 1;
+        }
+        .hero-title span { color: var(--caribbean); }
+        .hero-sub {
+            color: var(--pistachio);
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        /* ── MAIN LAYOUT ── */
+        .main-wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 2rem;
+            align-items: start;
+        }
+        @media(max-width:900px){ .main-wrap { grid-template-columns: 1fr; } }
+
+        /* ── THEATER SECTION ── */
+        .theater-box {
+            background: var(--pine);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(44,194,149,0.15);
+        }
+        .section-label {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--mint);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-label::after {
+            content:'';
+            flex:1;
+            height:1px;
+            background: rgba(44,194,149,0.2);
+        }
+
+        /* STAGE */
+        .stage-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .stage {
+            background: linear-gradient(180deg, var(--basil) 0%, var(--bangladesh) 100%);
+            border: 2px solid var(--meadow);
+            border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+            padding: 1.2rem 4rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 8px;
+            color: var(--caribbean);
+            position: relative;
+            box-shadow: 0 0 40px rgba(44,194,149,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .stage::after {
+            content:'';
+            position:absolute;
+            bottom:-12px; left:50%;
+            transform:translateX(-50%);
+            width:80%;
+            height:12px;
+            background: linear-gradient(180deg, rgba(44,194,149,0.3), transparent);
+        }
+
+        /* SEATING CHART */
+        #seatingChart {
+            margin-top: 1rem;
+        }
+        .seat-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 0;
+            position: relative;
+        }
+        .row-label {
+            width: 24px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--pistachio);
+            text-align: center;
+            flex-shrink: 0;
+            margin-right: 6px;
+        }
+        .seat {
+            width: 22px;
+            height: 22px;
+            border-radius: 5px 5px 2px 2px;
+            margin: 0 3px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+            border: 1px solid transparent;
+            font-size: 8px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .seat::before {
+            content:'';
+            position:absolute;
+            top:0; left:2px; right:2px;
+            height:3px;
+            border-radius:2px 2px 0 0;
+            background: rgba(255,255,255,0.15);
+        }
+        .seat.available {
+            background: var(--bangladesh);
+            border-color: var(--frog);
+        }
+        .seat.available:hover {
+            background: var(--meadow);
+            border-color: var(--caribbean);
+            transform: scale(1.25) translateY(-2px);
+            box-shadow: 0 4px 12px rgba(44,194,149,0.5);
+            color: var(--dark-green);
+        }
+        .seat.selected {
+            background: var(--caribbean);
+            border-color: var(--white);
+            color: var(--dark-green);
+            box-shadow: 0 0 14px rgba(0,223,129,0.6);
+            animation: seatPulse 2s infinite;
+        }
+        .seat.occupied {
+            background: rgba(112,125,125,0.25);
+            border-color: rgba(112,125,125,0.3);
+            cursor: not-allowed;
+            color: rgba(112,125,125,0.5);
+        }
+        @keyframes seatPulse {
+            0%,100% { box-shadow: 0 0 10px rgba(0,223,129,0.5); }
+            50% { box-shadow: 0 0 20px rgba(0,223,129,0.9); }
+        }
+
+        /* LEGEND */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--pistachio);
+            letter-spacing: 1px;
+        }
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+        .legend-dot.available { background: var(--bangladesh); border: 1px solid var(--frog); }
+        .legend-dot.selected { background: var(--caribbean); }
+        .legend-dot.occupied { background: rgba(112,125,125,0.25); border: 1px solid rgba(112,125,125,0.3); }
+
+        /* ── FORM PANEL ── */
+        .form-panel {
+            position: sticky;
+            top: 90px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .card-panel {
+            background: var(--pine);
+            border-radius: 20px;
+            padding: 1.8rem;
+            border: 1px solid rgba(44,194,149,0.15);
+        }
+        .panel-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            color: var(--caribbean);
+            margin-bottom: 1.2rem;
+        }
+
+        .form-label {
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--pistachio);
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+        .form-control {
+            background: var(--basil) !important;
+            border: 1px solid rgba(44,194,149,0.2) !important;
+            color: var(--white) !important;
+            border-radius: 8px !important;
+            padding: 0.65rem 0.9rem !important;
+            font-size: 0.9rem !important;
+            transition: border-color 0.2s, box-shadow 0.2s !important;
+        }
+        .form-control:focus {
+            border-color: var(--meadow) !important;
+            box-shadow: 0 0 0 3px rgba(44,194,149,0.15) !important;
+            outline: none !important;
+        }
+        .form-control::placeholder { color: var(--stone) !important; }
+
+        /* Selected seats display */
+        .seats-display {
+            background: var(--basil);
+            border: 1px solid rgba(44,194,149,0.2);
+            border-radius: 8px;
+            padding: 0.65rem 0.9rem;
+            font-size: 0.85rem;
+            color: var(--pistachio);
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .seats-display.has-seats { border-color: var(--meadow); }
+        .seat-tag {
+            background: var(--caribbean);
+            color: var(--dark-green);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+        }
+
+        /* Reserve button */
+        .btn-reserve {
+            width: 100%;
+            padding: 1rem;
+            background: var(--caribbean);
+            color: var(--dark-green);
+            border: none;
+            border-radius: 10px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-reserve::before {
+            content:'';
+            position:absolute;
+            inset:0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.4s;
+        }
+        .btn-reserve:hover { background: var(--meadow); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,223,129,0.35); }
+        .btn-reserve:hover::before { transform: translateX(100%); }
+        .btn-reserve:active { transform: translateY(0); }
+
+        /* ── CONFIRMATION ── */
+        #reservationInfo {
+            display:none;
+            background: linear-gradient(135deg, var(--bangladesh) 0%, var(--pine) 100%);
+            border: 1px solid var(--meadow);
+            border-radius: 20px;
+            padding: 1.8rem;
+        }
+        #reservationInfo h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 3px;
+            font-size: 1.5rem;
+            color: var(--caribbean);
+        }
+        #reservationDetails { font-size: 0.85rem; color: var(--pistachio); line-height: 2; }
+        #reservationDetails strong { color: var(--white); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--pine);
+            border-top: 1px solid rgba(44,194,149,0.15);
+            padding: 3rem 0 2rem;
+            margin-top: 2rem;
+        }
+        footer h5 {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 3px;
+            font-size: 1.2rem;
+            color: var(--caribbean);
+            margin-bottom: 1rem;
+        }
+        footer p, footer small { color: var(--pistachio); font-size: 0.85rem; line-height: 1.9; }
+        footer .divider { border-color: rgba(44,194,149,0.15); }
+        .footer-icon { color: var(--meadow); margin-right: 6px; }
+
+        /* Notification */
+        .notif {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 2000;
+            padding: 0.9rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            max-width: 300px;
+            animation: slideIn 0.3s ease;
+            border: 1px solid rgba(44,194,149,0.3);
+        }
+        .notif-success { background: var(--bangladesh); color: var(--caribbean); }
+        .notif-danger  { background: #3d1a1a; color: #ff8080; border-color: rgba(255,80,80,0.3); }
+        .notif-warning { background: #3d2e00; color: #ffd080; border-color: rgba(255,200,80,0.3); }
+        @keyframes slideIn { from { transform: translateX(120%); opacity:0; } to { transform: translateX(0); opacity:1; } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--dark-green); }
+        ::-webkit-scrollbar-thumb { background: var(--bangladesh); border-radius: 3px; }
+    </style>
 </head>
 <body>
-    <!-- Barra de Navegación -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">UNA-TEATRO</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                </ul>
-            </div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">UNA<span>-TEATRO</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-3">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <main class="container my-5">
-        <!-- Escenario y Asientos Curvos -->
-        <section class="curved-theater mb-5">
-            <div class="theater-layout">
-                <!-- Escenario Superior -->
-                <div class="stage-container">
-                    <div class="stage-shape">ESCENARIO</div>
-                </div>
-                
-                <!-- Asientos en Filas Curvas -->
-                <div id="seatingChart" class="seating-chart">
-                    <!-- Los asientos se generarán dinámicamente con JavaScript -->
-                </div>
-            </div>
-        </section>
+<!-- HERO -->
+<div class="hero-strip">
+    <div class="hero-title">SISTEMA DE <span>RESERVAS</span></div>
+    <div class="hero-sub">Selecciona tus asientos — Vive la experiencia</div>
+</div>
 
-        <!-- Disposición de Asientos -->
-        <section class="seating-section mb-5">
-            <h3 class="text-center mb-4">Seleccione sus Asientos</h3>
-            
-        <!-- Leyenda -->
-        <div class="legend d-flex justify-content-center gap-4 mb-4">
-            <div class="d-flex align-items-center gap-2">
-                <div class="seat available"></div>
-                <span>Disponible</span>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-                <div class="seat occupied"></div>
-                <span>Ocupado</span>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-                <div class="seat selected"></div>
-                <span>Seleccionado</span>
-            </div>
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- LEFT: Theater -->
+    <div class="theater-box">
+        <div class="section-label">Sala Principal</div>
+
+        <!-- Stage -->
+        <div class="stage-wrap">
+            <div class="stage">ESCENARIO</div>
         </div>
 
-        </section>
+        <!-- Seating Chart -->
+        <div id="seatingChart"></div>
 
-        <!-- Formulario de Reserva -->
-        <section class="reservation-form-section mb-5">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card shadow">
-                        <div class="card-header bg-primary text-white">
-                            <h4 class="mb-0">Realizar Reserva</h4>
-                        </div>
-                        <div class="card-body">
-                            <form id="reservationForm">
-                                <div class="mb-3">
-                                    <label for="seatCount" class="form-label">¿Cuántos asientos desea reservar?</label>
-                                    <input type="number" class="form-control" id="seatCount" min="1" max="8" value="1" required>
-                                    <small class="text-muted">Máximo 8 asientos por reserva</small>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Asientos seleccionados:</label>
-                                    <div id="selectedSeats" class="alert alert-info">
-                                        <span id="selectedSeatsText">Ningún asiento seleccionado</span>
-                                    </div>
-                                </div>
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot available"></div>Disponible</div>
+            <div class="legend-item"><div class="legend-dot selected"></div>Seleccionado</div>
+            <div class="legend-item"><div class="legend-dot occupied"></div>Ocupado</div>
+        </div>
+    </div>
 
-                                <div class="mb-3">
-                                    <label for="customerName" class="form-label">Nombre completo</label>
-                                    <input type="text" class="form-control" id="customerName" required>
-                                </div>
+    <!-- RIGHT: Form -->
+    <div class="form-panel">
+        <div class="card-panel">
+            <div class="panel-title">Tu Reserva</div>
 
-                                <div class="mb-3">
-                                    <label for="customerEmail" class="form-label">Correo electrónico</label>
-                                    <input type="email" class="form-control" id="customerEmail" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="customerPhone" class="form-label">Teléfono</label>
-                                    <input type="tel" class="form-control" id="customerPhone" required>
-                                </div>
-
-                                <button type="submit" class="btn reserve-btn btn-lg w-100" id="confirmReservation">
-                                    Reserve a Seat
-                                </button>
-                            </form>
-                        </div>
+            <form id="reservationForm">
+                <div class="mb-3">
+                    <label class="form-label">Asientos seleccionados</label>
+                    <div id="selectedSeatsDisplay" class="seats-display">
+                        <span id="selectedSeatsText" style="color:var(--stone);font-size:0.8rem;">Haz clic en los asientos del mapa</span>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Información de Reserva -->
-        <section class="reservation-info-section" id="reservationInfo" style="display: none;">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="alert alert-success">
-                        <h4 class="alert-heading">¡Reserva Confirmada!</h4>
-                        <p id="reservationDetails"></p>
-                        <hr>
-                        <p class="mb-0">Por favor, presente este comprobante al llegar al teatro.</p>
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label">Cantidad de asientos</label>
+                    <input type="number" class="form-control" id="seatCount" min="1" max="8" value="1" required>
+                    <small style="color:var(--stone);font-size:0.72rem;">Máximo 8 por reserva</small>
                 </div>
-            </div>
-        </section>
-    </main>
 
-    <footer class="bg-dark text-white py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>UNA-TEATRO</h5>
-                    <p class="mb-1"><i class="bi bi-geo-alt"></i> Av. Principal #123, Ciudad Universitaria</p>
-                    <p class="mb-1"><i class="bi bi-telephone"></i> (506) 2222-3333</p>
-                    <p class="mb-0"><i class="bi bi-envelope"></i> info@una-teatro.ac.cr</p>
+                <div class="mb-3">
+                    <label class="form-label">Nombre completo</label>
+                    <input type="text" class="form-control" id="customerName" placeholder="Ej: María González" required>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <h5>Horario</h5>
-                    <p class="mb-1">Miércoles a Sábado: 19:00</p>
-                    <p class="mb-1">Domingos: 15:00</p>
-                    <p class="mb-0">Lunes y Martes: Cerrado</p>
+
+                <div class="mb-3">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" id="customerEmail" placeholder="correo@ejemplo.com" required>
                 </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Teléfono</label>
+                    <input type="tel" class="form-control" id="customerPhone" placeholder="(506) 0000-0000" required>
+                </div>
+
+                <button type="submit" class="btn-reserve">Confirmar Reserva →</button>
+            </form>
+        </div>
+
+        <!-- Confirmation -->
+        <div id="reservationInfo">
+            <h4>¡Reserva Confirmada!</h4>
+            <hr style="border-color:rgba(44,194,149,0.2);margin:1rem 0;">
+            <div id="reservationDetails"></div>
+            <p style="margin-top:1rem;font-size:0.75rem;color:var(--frog);">Presenta este comprobante al llegar al teatro.</p>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-4 mb-md-0">
+                <h5>UNA-TEATRO</h5>
+                <p><span class="footer-icon">📍</span>Av. Principal #123, Ciudad Universitaria</p>
+                <p><span class="footer-icon">📞</span>(506) 2222-3333</p>
+                <p><span class="footer-icon">✉️</span>info@una-teatro.ac.cr</p>
             </div>
-            <hr class="my-3">
-            <div class="text-start">
-                <small>&copy; 2024 UNA-TEATRO</small>
+            <div class="col-md-6 text-md-end">
+                <h5>Horario</h5>
+                <p>Miércoles a Sábado: 19:00</p>
+                <p>Domingos: 15:00</p>
+                <p>Lunes y Martes: Cerrado</p>
             </div>
         </div>
-    </footer>
+        <hr class="divider my-3">
+        <small>&copy; 2024 UNA-TEATRO — Todos los derechos reservados</small>
+    </div>
+</footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../JS/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+class TheaterSeating {
+    constructor() {
+        this.selectedSeats = [];
+        this.maxSeats = 8;
+        this.occupiedSeats = this.generateOccupied();
+        this.rows = [
+            { label: 'A', seats: 10, curve: 0 },
+            { label: 'B', seats: 12, curve: 4 },
+            { label: 'C', seats: 14, curve: 8 },
+            { label: 'D', seats: 16, curve: 12 },
+            { label: 'E', seats: 18, curve: 16 },
+            { label: 'F', seats: 16, curve: 12 },
+            { label: 'G', seats: 14, curve: 8 },
+            { label: 'H', seats: 12, curve: 4 },
+        ];
+        this.init();
+    }
+
+    generateOccupied() {
+        const occupied = [];
+        const rows = ['A','B','C','D','E','F','G','H'];
+        const counts = [10,12,14,16,18,16,14,12];
+        const total = Math.floor(Math.random() * 30) + 20;
+        for (let i = 0; i < total; i++) {
+            const ri = Math.floor(Math.random() * rows.length);
+            const si = Math.floor(Math.random() * counts[ri]) + 1;
+            const id = `${rows[ri]}${si}`;
+            if (!occupied.includes(id)) occupied.push(id);
+        }
+        return occupied;
+    }
+
+    init() {
+        this.render();
+        this.bindEvents();
+    }
+
+    render() {
+        const container = document.getElementById('seatingChart');
+        container.innerHTML = '';
+        this.rows.forEach(row => {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'seat-row';
+
+            const lbl = document.createElement('div');
+            lbl.className = 'row-label';
+            lbl.textContent = row.label;
+            rowDiv.appendChild(lbl);
+
+            for (let i = 0; i < row.seats; i++) {
+                const id = `${row.label}${i+1}`;
+                const seat = document.createElement('div');
+                seat.className = 'seat';
+                seat.dataset.seatId = id;
+                seat.textContent = i + 1;
+                seat.title = `Asiento ${id}`;
+
+                if (row.curve > 0) {
+                    const offset = Math.sin((i / (row.seats - 1)) * Math.PI - Math.PI / 2) * row.curve;
+                    seat.style.transform = `translateY(${offset}px)`;
+                }
+
+                seat.classList.add(this.occupiedSeats.includes(id) ? 'occupied' : 'available');
+                rowDiv.appendChild(seat);
+            }
+            container.appendChild(rowDiv);
+        });
+    }
+
+    bindEvents() {
+        document.addEventListener('click', e => {
+            if (e.target.classList.contains('seat') && !e.target.classList.contains('occupied')) {
+                this.toggleSeat(e.target);
+            }
+        });
+        document.getElementById('reservationForm').addEventListener('submit', e => {
+            e.preventDefault();
+            this.processReservation();
+        });
+        document.getElementById('seatCount').addEventListener('change', () => this.validateCount());
+    }
+
+    toggleSeat(el) {
+        const id = el.dataset.seatId;
+        if (el.classList.contains('selected')) {
+            el.classList.replace('selected','available');
+            this.selectedSeats = this.selectedSeats.filter(s => s !== id);
+        } else {
+            if (this.selectedSeats.length >= this.maxSeats) {
+                this.notify('Máximo 8 asientos por reserva', 'warning'); return;
+            }
+            el.classList.replace('available','selected');
+            this.selectedSeats.push(id);
+        }
+        this.updateDisplay();
+        document.getElementById('seatCount').value = this.selectedSeats.length || 1;
+    }
+
+    updateDisplay() {
+        const display = document.getElementById('selectedSeatsDisplay');
+        const text = document.getElementById('selectedSeatsText');
+        display.innerHTML = '';
+        if (this.selectedSeats.length === 0) {
+            display.classList.remove('has-seats');
+            const span = document.createElement('span');
+            span.style.cssText = 'color:var(--stone);font-size:0.8rem;';
+            span.textContent = 'Haz clic en los asientos del mapa';
+            display.appendChild(span);
+        } else {
+            display.classList.add('has-seats');
+            this.selectedSeats.sort().forEach(id => {
+                const tag = document.createElement('span');
+                tag.className = 'seat-tag';
+                tag.textContent = id;
+                display.appendChild(tag);
+            });
+        }
+    }
+
+    validateCount() {
+        const val = parseInt(document.getElementById('seatCount').value);
+        if (this.selectedSeats.length > 0 && this.selectedSeats.length !== val) {
+            this.notify(`Tienes ${this.selectedSeats.length} asientos seleccionados pero indicaste ${val}`, 'warning');
+        }
+    }
+
+    processReservation() {
+        const name  = document.getElementById('customerName').value.trim();
+        const email = document.getElementById('customerEmail').value.trim();
+        const phone = document.getElementById('customerPhone').value.trim();
+        const count = parseInt(document.getElementById('seatCount').value);
+
+        if (!name || !email || !phone) { this.notify('Completa todos los campos', 'danger'); return; }
+        if (this.selectedSeats.length === 0) { this.notify('Selecciona al menos un asiento', 'danger'); return; }
+        if (this.selectedSeats.length !== count) {
+            this.notify(`Seleccionados: ${this.selectedSeats.length} — Solicitados: ${count}`, 'danger'); return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { this.notify('Correo inválido', 'danger'); return; }
+
+        this.confirmReservation(name, email, phone);
+    }
+
+    confirmReservation(name, email, phone) {
+        const seatsText = [...this.selectedSeats].sort().join(', ');
+        const resNum = 'RES-' + Date.now().toString().slice(-8);
+        const total = (this.selectedSeats.length * 5000).toLocaleString('es-CR');
+        const date = new Date().toLocaleDateString('es-CR');
+        const time = new Date().toLocaleTimeString('es-CR', {hour:'2-digit',minute:'2-digit'});
+
+        this.selectedSeats.forEach(id => {
+            const el = document.querySelector(`[data-seat-id="${id}"]`);
+            if (el) { el.classList.remove('selected'); el.classList.add('occupied'); }
+            this.occupiedSeats.push(id);
+        });
+
+        document.getElementById('reservationDetails').innerHTML = `
+            <strong>N° Reserva:</strong> ${resNum}<br>
+            <strong>Cliente:</strong> ${name}<br>
+            <strong>Correo:</strong> ${email}<br>
+            <strong>Teléfono:</strong> ${phone}<br>
+            <strong>Asientos:</strong> ${seatsText}<br>
+            <strong>Fecha:</strong> ${date} — ${time}<br>
+            <strong>Total:</strong> ₡${total}
+        `;
+
+        const info = document.getElementById('reservationInfo');
+        info.style.display = 'block';
+        info.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+        this.selectedSeats = [];
+        this.updateDisplay();
+        document.getElementById('reservationForm').reset();
+        document.getElementById('seatCount').value = 1;
+        this.notify('¡Reserva confirmada exitosamente!', 'success');
+    }
+
+    /* ── suggest: Exercise 2 ──────────────────────────────────────
+       Finds the best contiguous seats closest to theater center.
+       Returns a Set of seat IDs, or empty Set if not possible.
+    ────────────────────────────────────────────────────────────── */
+    suggest(n) {
+        // Center row index (rows sorted A=front … H=back, center = middle)
+        const centerIndex = Math.floor(this.rows.length / 2);
+
+        // Build sorted order by distance from center
+        const order = this.rows.map((r, i) => ({ row: r, dist: Math.abs(i - centerIndex) }))
+            .sort((a, b) => a.dist - b.dist);
+
+        for (const { row } of order) {
+            if (n > row.seats) continue; // exceeds row size → skip
+
+            // Build availability array for this row
+            const avail = [];
+            for (let i = 1; i <= row.seats; i++) {
+                const id = `${row.label}${i}`;
+                avail.push(!this.occupiedSeats.includes(id));
+            }
+
+            // Slide window of size n
+            for (let start = 0; start <= row.seats - n; start++) {
+                const window = avail.slice(start, start + n);
+                if (window.every(Boolean)) {
+                    const result = new Set();
+                    for (let k = 0; k < n; k++) result.add(`${row.label}${start + k + 1}`);
+                    return result;
+                }
+            }
+        }
+        return new Set(); // no contiguous seats found
+    }
+
+    notify(msg, type = 'info') {
+        const n = document.createElement('div');
+        n.className = `notif notif-${type}`;
+        n.textContent = msg;
+        document.body.appendChild(n);
+        setTimeout(() => n.remove(), 4000);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    window.theater = new TheaterSeating();
+
+    // Ctrl+R → reset
+    document.addEventListener('keydown', e => {
+        if (e.ctrlKey && e.key === 'r') {
+            e.preventDefault();
+            if (confirm('¿Resetear el sistema de reservas?')) {
+                window.theater.selectedSeats = [];
+                window.theater.occupiedSeats = window.theater.generateOccupied();
+                window.theater.render();
+                window.theater.updateDisplay();
+                document.getElementById('reservationInfo').style.display = 'none';
+                document.getElementById('reservationForm').reset();
+            }
+        }
+    });
+});
+</script>
 </body>
 </html>
