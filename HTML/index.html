@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNA-TEATRO - Sistema de Reservas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/styles.css">
+</head>
+<body>
+    <!-- Barra de Navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">UNA-TEATRO</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <!-- Escenario y Asientos Curvos -->
+        <section class="curved-theater mb-5">
+            <div class="theater-layout">
+                <!-- Escenario Superior -->
+                <div class="stage-container">
+                    <div class="stage-shape">ESCENARIO</div>
+                </div>
+                
+                <!-- Asientos en Filas Curvas -->
+                <div id="seatingChart" class="seating-chart">
+                    <!-- Los asientos se generarán dinámicamente con JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Disposición de Asientos -->
+        <section class="seating-section mb-5">
+            <h3 class="text-center mb-4">Seleccione sus Asientos</h3>
+            
+        <!-- Leyenda -->
+        <div class="legend d-flex justify-content-center gap-4 mb-4">
+            <div class="d-flex align-items-center gap-2">
+                <div class="seat available"></div>
+                <span>Disponible</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <div class="seat occupied"></div>
+                <span>Ocupado</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <div class="seat selected"></div>
+                <span>Seleccionado</span>
+            </div>
+        </div>
+
+        </section>
+
+        <!-- Formulario de Reserva -->
+        <section class="reservation-form-section mb-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Realizar Reserva</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="reservationForm">
+                                <div class="mb-3">
+                                    <label for="seatCount" class="form-label">¿Cuántos asientos desea reservar?</label>
+                                    <input type="number" class="form-control" id="seatCount" min="1" max="8" value="1" required>
+                                    <small class="text-muted">Máximo 8 asientos por reserva</small>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Asientos seleccionados:</label>
+                                    <div id="selectedSeats" class="alert alert-info">
+                                        <span id="selectedSeatsText">Ningún asiento seleccionado</span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="customerName" class="form-label">Nombre completo</label>
+                                    <input type="text" class="form-control" id="customerName" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="customerEmail" class="form-label">Correo electrónico</label>
+                                    <input type="email" class="form-control" id="customerEmail" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="customerPhone" class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" id="customerPhone" required>
+                                </div>
+
+                                <button type="submit" class="btn reserve-btn btn-lg w-100" id="confirmReservation">
+                                    Reserve a Seat
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Información de Reserva -->
+        <section class="reservation-info-section" id="reservationInfo" style="display: none;">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="alert alert-success">
+                        <h4 class="alert-heading">¡Reserva Confirmada!</h4>
+                        <p id="reservationDetails"></p>
+                        <hr>
+                        <p class="mb-0">Por favor, presente este comprobante al llegar al teatro.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>UNA-TEATRO</h5>
+                    <p class="mb-1"><i class="bi bi-geo-alt"></i> Av. Principal #123, Ciudad Universitaria</p>
+                    <p class="mb-1"><i class="bi bi-telephone"></i> (506) 2222-3333</p>
+                    <p class="mb-0"><i class="bi bi-envelope"></i> info@una-teatro.ac.cr</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5>Horario</h5>
+                    <p class="mb-1">Miércoles a Sábado: 19:00</p>
+                    <p class="mb-1">Domingos: 15:00</p>
+                    <p class="mb-0">Lunes y Martes: Cerrado</p>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-start">
+                <small>&copy; 2024 UNA-TEATRO</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../JS/script.js"></script>
+</body>
+</html>
