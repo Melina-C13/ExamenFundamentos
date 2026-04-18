@@ -1,14 +1,46 @@
-// Sistema de Reservas UNA-TEATRO
+// Sistema de Reservas UNA-TEATRO - Versión con Matriz de Objetos
 
 class TheaterSeating {
     constructor() {
-        this.rows = 8;
-        this.seatsPerRow = 12;
         this.selectedSeats = [];
-        this.occupiedSeats = this.generateRandomOccupiedSeats();
         this.maxSeatsPerReservation = 8;
+        this.maxSeatsPerRow = 20; // Máximo de asientos por fila
+        
+        // ESTRUCTURA DE LA MATRIZ DE ASIENTOS
+        this.seatingMatrix = this.initializeSeatingMatrix();
+        
+        // Generar algunos asientos ocupados aleatoriamente para demostración
+        this.generateRandomOccupiedSeats();
         
         this.init();
+    }
+
+    /**
+     * Inicializa la matriz de asientos con objetos
+     * Cada asiento tiene: id, row, number, occupied
+     */
+    initializeSeatingMatrix() {
+        const matrix = [];
+        const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+        const seatsPerRow = [12, 14, 16, 18, 20, 18, 16, 14];
+        
+        let globalId = 1;
+        
+        rows.forEach((rowLetter, rowIndex) => {
+            const row = [];
+            for (let seatNum = 1; seatNum <= seatsPerRow[rowIndex]; seatNum++) {
+                row.push({
+                    id: globalId++,
+                    row: rowLetter,
+                    number: seatNum,
+                    occupied: false,
+                    element: null // Referencia al elemento DOM
+                });
+            }
+            matrix.push(row);
+        });
+        
+        return matrix;
     }
 
     init() {
@@ -17,87 +49,68 @@ class TheaterSeating {
         this.updateSelectedSeatsDisplay();
     }
 
+    /**
+     * Genera asientos ocupados aleatoriamente en la matriz
+     */
     generateRandomOccupiedSeats() {
-        const occupied = [];
-        const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-        const seatsPerRow = [12, 14, 16, 18, 20, 18, 16, 14];
         const numberOfOccupied = Math.floor(Math.random() * 30) + 20; // 20-50 asientos ocupados
         
         for (let i = 0; i < numberOfOccupied; i++) {
-            const rowIndex = Math.floor(Math.random() * rows.length);
-            const seatNumber = Math.floor(Math.random() * seatsPerRow[rowIndex]) + 1;
-            const seatId = `${rows[rowIndex]}${seatNumber}`;
+            const rowIndex = Math.floor(Math.random() * this.seatingMatrix.length);
+            const seatIndex = Math.floor(Math.random() * this.seatingMatrix[rowIndex].length);
             
-            if (!occupied.includes(seatId)) {
-                occupied.push(seatId);
+            if (!this.seatingMatrix[rowIndex][seatIndex].occupied) {
+                this.seatingMatrix[rowIndex][seatIndex].occupied = true;
             }
         }
-        
-        return occupied;
     }
 
     generateSeatingChart() {
         const container = document.getElementById('seatingChart');
         container.innerHTML = '';
-
-        // Configuración de filas (similar a la imagen)
-        const rows = [
-            { label: 'A', seats: 12, curve: 0 },    // Fila frontal (recta)
-            { label: 'B', seats: 14, curve: 5 },    // Ligera curva
-            { label: 'C', seats: 16, curve: 10 },   // Curva moderada
-            { label: 'D', seats: 18, curve: 15 },   // Curva más pronunciada
-            { label: 'E', seats: 20, curve: 20 },   // Curva fuerte
-            { label: 'F', seats: 18, curve: 18 },   // Curva disminuyendo
-            { label: 'G', seats: 16, curve: 12 },   // Curva suave
-            { label: 'H', seats: 14, curve: 8 }     // Curva muy suave
-        ];
         
-        let seatCounter = 1;
-        
-        rows.forEach((row, rowIndex) => {
+        // Generar filas desde la matriz de objetos - DISEÑO ESTANDARIZADO
+        for (let i = 0; i < this.seatingMatrix.length; i++) {
+            const row = this.seatingMatrix[i];
             const rowDiv = document.createElement('div');
             rowDiv.className = 'seat-row';
             
-            // Etiqueta de fila
+            // Etiqueta de fila - Diseño limpio
             const labelDiv = document.createElement('div');
             labelDiv.className = 'row-label';
-            labelDiv.textContent = row.label;
+            labelDiv.textContent = row[0].row;
             rowDiv.appendChild(labelDiv);
             
-            // Contenedor para asientos de esta fila
+            // Contenedor para asientos de esta fila - Diseño estandarizado
             const seatsContainer = document.createElement('div');
-            seatsContainer.style.display = 'flex';
-            seatsContainer.style.justifyContent = 'center';
-            seatsContainer.style.alignItems = 'center';
-            seatsContainer.style.position = 'relative';
+            seatsContainer.className = 'seats-in-row';
             
-            for (let i = 0; i < row.seats; i++) {
-                const seatId = `${row.label}${i + 1}`;
+            // Generar asientos para esta fila
+            for (let j = 0; j < row.length; j++) {
+                const seat = row[j];
                 const seatDiv = document.createElement('div');
                 seatDiv.className = 'seat';
-                seatDiv.dataset.seatId = seatId;
-                seatDiv.textContent = i + 1; // Mostrar número del asiento
-                seatDiv.title = `Asiento ${seatId}`;
+                seatDiv.dataset.seatId = `${seat.row}${seat.number}`;
+                seatDiv.dataset.id = seat.id; // ID numérico para la función suggest
+                seatDiv.textContent = seat.number; // Mostrar número del asiento
+                seatDiv.title = `Asiento ${seat.row}${seat.number} (ID: ${seat.id})`;
                 
-                // Aplicar curva sutil
-                if (row.curve > 0) {
-                    const curveOffset = Math.sin((i / (row.seats - 1)) * Math.PI - Math.PI / 2) * row.curve;
-                    seatDiv.style.transform = `translateY(${curveOffset}px)`;
-                }
+                // Guardar referencia al elemento DOM
+                seat.element = seatDiv;
                 
-                if (this.occupiedSeats.includes(seatId)) {
+                // Asignar clase según estado - SIN CURVAS
+                if (seat.occupied) {
                     seatDiv.classList.add('occupied');
                 } else {
                     seatDiv.classList.add('available');
                 }
                 
                 seatsContainer.appendChild(seatDiv);
-                seatCounter++;
             }
             
             rowDiv.appendChild(seatsContainer);
             container.appendChild(rowDiv);
-        });
+        }
     }
 
     bindEvents() {
@@ -113,7 +126,7 @@ class TheaterSeating {
         if (form) {
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                this.processReservation();
+                this.confirmReservation();
             });
         }
 

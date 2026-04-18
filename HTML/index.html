@@ -6,62 +6,211 @@
     <title>UNA-TEATRO - Sistema de Reserva</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="../CSS/styles.css" rel="stylesheet">
     <style>
         :root {
-            --rich-black: #00DF81;
-            --dark-green: #032221;
-            --bangladesh: #03624C;
-            --meadow: #2CC295;
-            --caribbean: #00DF81;
-            --white: #F1F7F6;
-            --pine: #06302B;
-            --basil: #0B453A;
-            --forest: #095544;
-            --frog: #17876D;
-            --mint: #2FA98C;
-            --stone: #707D7D;
-            --pistachio: #AACBC4;
+            /* Paleta Institucional UNA - Diseño Profesional */
+            --una-red-primary: #DC143C;      /* Pantone 032C - Rojo UNA institucional */
+            --una-red-dark: #B91C1C;       /* Rojo oscuro para acentos */
+            --una-red-light: #EF4444;      /* Rojo claro para hover */
+            --una-white: #FFFFFF;          /* Blanco puro */
+            --una-gray-warm: #F5F5F5;      /* Gris cálido suave */
+            --una-gray-medium: #E5E7EB;    /* Gris medio */
+            --una-gray-cool: #D1D5DB;      /* Gris frío */
+            --una-gray-dark: #6B7280;     /* Gris oscuro */
+            --una-gray-darker: #374151;    /* Gris muy oscuro */
+            --una-black-soft: #1F2937;    /* Negro suave */
+            --una-shadow: rgba(0, 0, 0, 0.1);
+            --una-shadow-strong: rgba(0, 0, 0, 0.15);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
 
         body {
-            background-color: var(--dark-green);
-            color: var(--white);
-            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--una-black-soft) 0%, var(--una-gray-darker) 100%);
+            color: var(--una-white);
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* ── NAVBAR ── */
+        /* Tipografía institucional */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            color: var(--una-white);
+            letter-spacing: -0.025em;
+        }
+
+        p, span, div {
+            color: var(--una-gray-medium);
+        }
+
+        .text-primary {
+            color: var(--una-red-primary) !important;
+        }
+
+        /* ---- NAVBAR INSTITUCIONAL ---- */
         .navbar {
-            background: rgba(3, 34, 33, 0.95) !important;
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(44, 194, 149, 0.2);
-            padding: 1rem 0;
+            background: rgba(31, 41, 55, 0.95) !important;
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(220, 20, 60, 0.2);
+            padding: 1.25rem 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--una-shadow-strong);
         }
+        
         .navbar-brand {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            color: var(--caribbean) !important;
-            letter-spacing: 3px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--una-white) !important;
+            letter-spacing: -0.025em;
+            text-shadow: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
         }
-        .navbar-brand span { color: var(--white); }
-        .nav-link {
-            color: var(--pistachio) !important;
+        
+        .navbar-brand span {
+            color: var(--una-red-primary);
+            font-weight: 800;
+        }
+        
+        .navbar-brand:hover {
+            color: var(--una-red-primary) !important;
+            transform: translateY(-1px);
+        }
+        
+        .navbar-nav .nav-link {
+            color: var(--una-gray-medium) !important;
             font-weight: 500;
-            letter-spacing: 1px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            transition: color 0.2s;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0.5rem 1rem !important;
+            border-radius: 6px;
+            margin: 0 0.25rem;
         }
-        .nav-link:hover { color: var(--caribbean) !important; }
+        
+        .navbar-nav .nav-link:hover {
+            color: var(--una-white) !important;
+            background: rgba(220, 20, 60, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .navbar-nav .nav-link.active {
+            color: var(--una-red-primary) !important;
+            background: rgba(220, 20, 60, 0.15);
+        }
+        /* ---- HERO PRINCIPAL - DISEÑO UNA ---- */
+        .hero-main {
+            background: linear-gradient(135deg, var(--una-black-soft) 0%, var(--una-gray-darker) 100%);
+            border-bottom: 3px solid var(--una-red-primary);
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
 
-        /* ── HERO STRIP ── */
+        .hero-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--una-red-primary), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--una-white) 0%, var(--una-red-primary) 50%, var(--una-white) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-shadow: 0 4px 20px rgba(220, 20, 60, 0.3);
+        }
+
+        .hero-subtitle {
+            text-align: center;
+            color: var(--una-gray-medium);
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+        }
+
+        /* ---- CONTENEDOR PRINCIPAL INSTITUCIONAL ---- */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* ---- TARJETAS Y CONTENEDORES ---- */
+        .institutional-card {
+            background: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(220, 20, 60, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .institutional-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(220, 20, 60, 0.2);
+            border-color: var(--una-red-primary);
+        }
+
+        .card-header-institutional {
+            background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(220, 20, 60, 0.05) 100%);
+            border-bottom: 2px solid var(--una-red-primary);
+            border-radius: 12px 12px 0 0;
+            padding: 1.5rem;
+            margin: -2rem -2rem 1.5rem -2rem;
+        }
+
+        .card-title-institutional {
+            color: var(--una-red-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-title-institutional::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--una-red-primary);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+        }
         .hero-strip {
-            background: linear-gradient(90deg, var(--pine) 0%, var(--bangladesh) 50%, var(--pine) 100%);
+            background: linear-gradient(90deg, var(--una-blue) 0%, var(--una-blue-light) 50%, var(--una-blue) 100%);
             text-align: center;
             padding: 2.5rem 1rem 1.5rem;
             position: relative;
@@ -95,17 +244,37 @@
             margin-top: 0.5rem;
         }
 
-        /* ── MAIN LAYOUT ── */
-        .main-wrap {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 2.5rem 1.5rem;
+        /* ---- MAIN LAYOUT INSTITUCIONAL ---- */
+        .main-layout {
             display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 2rem;
+            grid-template-columns: 1fr 400px;
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
             align-items: start;
+            min-height: 700px;
         }
-        @media(max-width:900px){ .main-wrap { grid-template-columns: 1fr; } }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr 380px;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .form-panel {
+                position: relative;
+                top: 0;
+                min-height: auto;
+            }
+        }
 
         /* ── THEATER SECTION ── */
         .theater-box {
@@ -128,7 +297,7 @@
             content:'';
             flex:1;
             height:1px;
-            background: rgba(44,194,149,0.2);
+            background: rgba(220, 20, 60, 0.4);
         }
 
         /* STAGE */
@@ -147,7 +316,7 @@
             letter-spacing: 8px;
             color: var(--caribbean);
             position: relative;
-            box-shadow: 0 0 40px rgba(44,194,149,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
+            box-shadow: 0 0 40px rgba(220, 20, 60, 0.15), inset 0 1px 0 rgba(255,255,255,0.05);
         }
         .stage::after {
             content:'';
@@ -156,7 +325,7 @@
             transform:translateX(-50%);
             width:80%;
             height:12px;
-            background: linear-gradient(180deg, rgba(44,194,149,0.3), transparent);
+            background: linear-gradient(180deg, rgba(220, 20, 60, 0.4), transparent);
         }
 
         /* SEATING CHART */
@@ -205,23 +374,61 @@
             border-radius:2px 2px 0 0;
             background: rgba(255,255,255,0.15);
         }
+        /* ---- ASIENTOS - DISEÑO INSTITUCIONAL ---- */
+        .seat {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            margin: 0 6px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
         .seat.available {
-            background: var(--bangladesh);
-            border-color: var(--frog);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: var(--una-white);
         }
+
         .seat.available:hover {
-            background: var(--meadow);
-            border-color: var(--caribbean);
-            transform: scale(1.25) translateY(-2px);
-            box-shadow: 0 4px 12px rgba(44,194,149,0.5);
-            color: var(--dark-green);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--una-red-primary);
+            transform: scale(1.1);
+            box-shadow: 0 4px 16px rgba(220, 20, 60, 0.3);
         }
+
         .seat.selected {
-            background: var(--caribbean);
-            border-color: var(--white);
-            color: var(--dark-green);
-            box-shadow: 0 0 14px rgba(0,223,129,0.6);
-            animation: seatPulse 2s infinite;
+            background: var(--una-red-primary);
+            border-color: var(--una-red-dark);
+            color: var(--una-white);
+            box-shadow: 0 0 20px rgba(220, 20, 60, 0.4);
+            animation: institutionalPulse 2s infinite;
+        }
+
+        .seat.occupied {
+            background: rgba(107, 114, 128, 0.3);
+            border-color: rgba(107, 114, 128, 0.5);
+            cursor: not-allowed;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes institutionalPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(220, 20, 60, 0.4);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(220, 20, 60, 0.6);
+                transform: scale(1.05);
+            }
         }
         .seat.occupied {
             background: rgba(112,125,125,0.25);
@@ -251,22 +458,119 @@
             letter-spacing: 1px;
         }
         .legend-dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 3px;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 12px;
+            border: 2px solid #8B0000;
         }
-        .legend-dot.available { background: var(--bangladesh); border: 1px solid var(--frog); }
-        .legend-dot.selected { background: var(--caribbean); }
-        .legend-dot.occupied { background: rgba(112,125,125,0.25); border: 1px solid rgba(112,125,125,0.3); }
+        .legend-dot.available { 
+            background: linear-gradient(135deg, #FFFFFF 0%, #f8f9fa 100%); 
+            border: 2px solid #8B0000; 
+        }
+        .legend-dot.selected { 
+            background: #b1042c; 
+            border: 2px solid #8B0000;
+            box-shadow: 0 0 15px rgba(177, 4, 44, 0.5);
+        }
+        .legend-dot.occupied { 
+            background: linear-gradient(135deg, #6B7280 0%, #374151 100%); 
+            border: 2px solid #8B0000; 
+            opacity: 0.9;
+        }
 
-        /* ── FORM PANEL ── */
+        /* ---- FORM PANEL AL LADO DE ASIENTOS ---- */
         .form-panel {
             position: sticky;
             top: 90px;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.25rem;
+            height: fit-content;
+            max-height: 85vh;
+            overflow-y: auto;
+            align-items: center;
         }
+
+        .form-panel .reservation-card {
+            min-height: auto;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem !important;
+            border: 2px solid var(--una-red-primary) !important;
+            border-radius: 18px !important;
+            box-shadow: 
+                0 15px 50px rgba(220, 20, 60, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-panel .reservation-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--una-red-primary) 0%, 
+                var(--una-red-light) 50%, 
+                var(--una-red-primary) 100%);
+            animation: cardGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes cardGlow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .form-panel .card-header {
+            padding: 1.5rem 2rem !important;
+            margin: -2rem -2rem 1.5rem -2rem !important;
+            background: linear-gradient(135deg, 
+                rgba(220, 20, 60, 0.15) 0%, 
+                rgba(220, 20, 60, 0.05) 100%) !important;
+            border-bottom: 2px solid var(--una-red-primary) !important;
+            border-radius: 18px 18px 0 0 !important;
+        }
+
+        .form-panel .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 !important;
+        }
+
+        .form-panel .card-title-institutional {
+            font-size: 1.5rem !important;
+            margin: 0 !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-panel .reservation-confirmation {
+            text-align: center;
+            border: 2px solid var(--una-red-primary) !important;
+            border-radius: 18px !important;
+            box-shadow: 
+                0 15px 50px rgba(220, 20, 60, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.2) !important;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-panel .reservation-confirmation .card-header {
+            padding: 1.5rem 2rem !important;
+            margin: -2rem -2rem 1.5rem -2rem !important;
+            background: linear-gradient(135deg, 
+                var(--una-red-primary) 0%, 
+                var(--una-red-dark) 100%) !important;
+            border-bottom: none !important;
+            border-radius: 18px 18px 0 0 !important;
+        }
+
         .card-panel {
             background: var(--pine);
             border-radius: 20px;
@@ -302,59 +606,146 @@
             border-color: var(--meadow) !important;
             box-shadow: 0 0 0 3px rgba(44,194,149,0.15) !important;
             outline: none !important;
-        }
-        .form-control::placeholder { color: var(--stone) !important; }
 
-        /* Selected seats display */
-        .seats-display {
-            background: var(--basil);
-            border: 1px solid rgba(44,194,149,0.2);
-            border-radius: 8px;
-            padding: 0.65rem 0.9rem;
-            font-size: 0.85rem;
-            color: var(--pistachio);
-            min-height: 42px;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-        .seats-display.has-seats { border-color: var(--meadow); }
-        .seat-tag {
-            background: var(--caribbean);
-            color: var(--dark-green);
+            .card-panel {
+                background: var(--pine);
+                border-radius: 20px;
+                padding: 1.8rem;
+                border: 1px solid rgba(44,194,149,0.15);
+            }
+            .panel-title {
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 1.5rem;
+                letter-spacing: 3px;
+                color: var(--caribbean);
+                margin-bottom: 1.2rem;
+            }
             font-size: 0.7rem;
             font-weight: 700;
             padding: 2px 8px;
-            border-radius: 4px;
-            letter-spacing: 1px;
+            border-radius: 12px;
+            margin: 0 4px;
+            display: inline-block;
         }
 
-        /* Reserve button */
-        .btn-reserve {
-            width: 100%;
-            padding: 1rem;
-            background: var(--caribbean);
-            color: var(--dark-green);
+        /* ---- BOTONES INSTITUCIONALES ---- */
+        .btn-institutional {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--una-red-primary) 0%, var(--una-red-dark) 100%);
+            color: var(--una-white);
             border: none;
-            border-radius: 10px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.2rem;
-            letter-spacing: 3px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 16px rgba(220, 20, 60, 0.3);
         }
-        .btn-reserve::before {
-            content:'';
-            position:absolute;
-            inset:0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.4s;
+
+        .btn-institutional::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .btn-reserve:hover { background: var(--meadow); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,223,129,0.35); }
+
+        .btn-institutional:hover {
+            background: linear-gradient(135deg, var(--una-red-light) 0%, var(--una-red-primary) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(220, 20, 60, 0.4);
+        }
+
+        .btn-institutional:hover::before {
+            left: 100%;
+        }
+
+        .btn-institutional:active {
+            transform: translateY(0);
+        }
+
+        /* ---- FORMULARIOS INSTITUCIONALES MEJOR VISIBILIDAD ---- */
+        .form-control-institutional {
+            background: #FFFFFF;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1rem 1.125rem;
+            color: #000000;
+            font-size: 1.125rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-control-institutional:focus {
+            background: #FFFFFF;
+            border-color: #b1042c;
+            box-shadow: 0 0 0 4px rgba(177, 4, 44, 0.15), 0 4px 12px rgba(177, 4, 44, 0.2);
+            outline: none;
+            transform: translateY(-1px);
+        }
+
+        .form-control-institutional::placeholder {
+            color: #6c757d;
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .form-label-institutional {
+            color: #b1042c;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            display: block;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            letter-spacing: 0.75px;
+        }
+
+        .seats-display {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1rem;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .seats-display:hover {
+            border-color: #b1042c;
+            box-shadow: 0 4px 12px rgba(177, 4, 44, 0.15);
+        }
+
+        .seat-tag {
+            background: #b1042c;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 0.375rem 0.875rem;
+            border-radius: 20px;
+            margin: 0.375rem;
+            display: inline-block;
+            animation: seatTagAppear 0.3s ease;
+        }
+
+        @keyframes seatTagAppear {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
         .btn-reserve:hover::before { transform: translateX(100%); }
         .btn-reserve:active { transform: translateY(0); }
 
@@ -413,8 +804,8 @@
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--dark-green); }
-        ::-webkit-scrollbar-thumb { background: var(--bangladesh); border-radius: 3px; }
+        ::-webkit-scrollbar-track { background: var(--una-gray); }
+        ::-webkit-scrollbar-thumb { background: var(--una-blue); border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -443,7 +834,7 @@
 </div>
 
 <!-- MAIN -->
-<div class="main-wrap">
+<div class="main-layout">
 
     <!-- LEFT: Theater -->
     <div class="theater-box">
@@ -465,50 +856,57 @@
         </div>
     </div>
 
-    <!-- RIGHT: Form -->
+    <!-- RIGHT: Form - Card Centrado -->
     <div class="form-panel">
-        <div class="card-panel">
-            <div class="panel-title">Tu Reserva</div>
-
-            <form id="reservationForm">
-                <div class="mb-3">
-                    <label class="form-label">Asientos seleccionados</label>
-                    <div id="selectedSeatsDisplay" class="seats-display">
-                        <span id="selectedSeatsText" style="color:var(--stone);font-size:0.8rem;">Haz clic en los asientos del mapa</span>
+        <div class="card reservation-card institutional-card">
+            <div class="card-header">
+                <h5 class="card-title-institutional text-center">Tu Reserva</h5>
+            </div>
+            <div class="card-body">
+                <form id="reservationForm">
+                    <div class="mb-3">
+                        <label class="form-label-institutional text-center w-100">Asientos seleccionados</label>
+                        <div id="selectedSeatsDisplay" class="seats-display text-center">
+                            <span id="selectedSeatsText" style="color:#495057;font-size:1.05rem;font-weight:600;">Haz clic en los asientos</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Cantidad de asientos</label>
-                    <input type="number" class="form-control" id="seatCount" min="1" max="8" value="1" required>
-                    <small style="color:var(--stone);font-size:0.72rem;">Máximo 8 por reserva</small>
-                </div>
+                    <div class="mb-3">
+                        <label class="form-label-institutional">Cantidad</label>
+                        <input type="number" class="form-control-institutional text-center" id="seatCount" min="1" max="8" value="1" required>
+                        <small class="d-block text-center" style="color:#495057;font-size:0.95rem;font-weight:600;">Máximo 8 asientos por reserva</small>
+                    </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Nombre completo</label>
-                    <input type="text" class="form-control" id="customerName" placeholder="Ej: María González" required>
-                </div>
+                    <div class="mb-3">
+                        <label class="form-label-institutional">Nombre</label>
+                        <input type="text" class="form-control-institutional" id="customerName" placeholder="María González" required>
+                    </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Correo electrónico</label>
-                    <input type="email" class="form-control" id="customerEmail" placeholder="correo@ejemplo.com" required>
-                </div>
+                    <div class="mb-3">
+                        <label class="form-label-institutional">Correo</label>
+                        <input type="email" class="form-control-institutional" id="customerEmail" placeholder="correo@ejemplo.com" required>
+                    </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Teléfono</label>
-                    <input type="tel" class="form-control" id="customerPhone" placeholder="(506) 0000-0000" required>
-                </div>
+                    <div class="mb-3">
+                        <label class="form-label-institutional">Teléfono</label>
+                        <input type="tel" class="form-control-institutional" id="customerPhone" placeholder="(506) 0000-0000" required>
+                    </div>
 
-                <button type="submit" class="btn-reserve">Confirmar Reserva →</button>
-            </form>
+                    <button type="submit" class="btn btn-primary reserve-btn w-100">Confirmar Reserva</button>
+                </form>
+            </div>
         </div>
 
-        <!-- Confirmation -->
-        <div id="reservationInfo">
-            <h4>¡Reserva Confirmada!</h4>
-            <hr style="border-color:rgba(44,194,149,0.2);margin:1rem 0;">
-            <div id="reservationDetails"></div>
-            <p style="margin-top:1rem;font-size:0.75rem;color:var(--frog);">Presenta este comprobante al llegar al teatro.</p>
+        <!-- Confirmation - Card Centrado -->
+        <div id="reservationInfo" class="institutional-card reservation-confirmation" style="display:none;">
+            <div class="card-header">
+                <h4 class="card-title-institutional text-center">¡Reserva Confirmada!</h4>
+            </div>
+            <div class="card-body text-center">
+                <hr style="border-color:var(--una-red-primary);margin:1rem 0;opacity:0.3;">
+                <div id="reservationDetails" style="color:var(--una-white);font-size:0.95rem;line-height:1.6;"></div>
+                <p style="margin-top:1.2rem;font-size:0.85rem;color:var(--una-gray-medium);">Presenta este comprobante al llegar al teatro.</p>
+            </div>
         </div>
     </div>
 </div>
